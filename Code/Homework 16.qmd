@@ -5,7 +5,8 @@ format: html
 editor: visual
 ---
 
-Setting up - clear R's environment and open packages 
+Setting up - clear R's environment and open packages
+
 ```{r}
 rm(list=ls())
 library(tidyverse)
@@ -13,26 +14,73 @@ library("here")
 ```
 
 Create a new data frame using the donnerville data
+
 ```{r}
 cover <- read.csv(here("data","donnerville_percent_cover.csv"))
 ```
 
-Take peak of data in two ways 
-I will be using the glimpse and structure fuctions to do so
+Take peak of data in two ways I will be using the glimpse and structure fuctions to do so
+
 ```{r}
 glimpse(cover)
 str(cover)
 ```
 
-convert Site, Plot.type and cover_type into factor variables
+### convert Site, Plot.type and cover_type into factor variables 
+
 ```{r}
 cover$Site <-as.factor(cover$Site)
 cover$Plot.type <- as.factor(cover$Plot.type)
 cover$cover_type <- as.factor(cover$cover_type)
 ```
 
-transform date into date variable 
-```{r}
+## transform date into date variable 
+I'm doing so by reassigning the value of Date to consist of only numbers and then I will use the dmy() function to convert it's type to date
 
+```{r}
+fix_date <-which(cover$Date == "13-Sep-17") #make new data frame with all of the date listing of 13-Sep-17. Coincidentally, this is all of them
+cover$Date[fix_date] <- "9-13-24" #override that character to be in an all number format
+cover$Date <- mdy(cover$Date) #indicate to r that the "character" is in a date format 
+```
+
+### Check the data for any errors
+
+I found a few discrepancies in the listing of the same level. I will now correct these using the which() function.
+
+correcting sites
+```{r}
+levels(cover$Site)
+fix_site1 <- which(cover$Site %in% c("donnerville 1","DONNERVILLE - 1", "Donnerville 1")) #making a data frame for rows that have these values 
+cover$Site[fix_site1] <- "Donnerville 1" #choosing one of the values to be a uniform name for all of them
+fix_site2 <- which(cover$Site %in% c("donnerville 2", "Donnerville 2"))
+cover$Site[fix_site2] <- "Donnerville 2"
+fix_site3 <- which(cover$Site %in% c("donnerville-3","Donnerville 3"))
+cover$Site[fix_site3] <- "Donnerville 3"
+cover$Site <- factor(cover$Site) #remind R that there are now 3 levels by doing this 
+levels(cover$Site)
+```
+now doing the same thing for cover type
+```{r}
+levels(cover$cover_type)
+fix_cover1 <- which(cover$cover_type %in% c("bare","Bare"))
+cover$cover_type[fix_cover1] <- "Bare"
+fix_cover2 <- which(cover$cover_type %in% c( "bryophtes","Bryophytes"))
+cover$cover_type[fix_cover2] <- "Bryophytes"
+fix_cover3 <- which(cover$cover_type %in% c("vasc ","Vascular"))
+cover$cover_type[fix_cover3] <- "Vascular"
+cover$cover_type <- factor(cover$cover_type)
+levels(cover$cover_type)
+```
+
+## Determining the average percent cover by cover type for Donnerville 1
+```{r}
+cover %>% #within the cover data frame
+  group_by(cover_type) %>% #sorting out means of     percent by the cover type
+  summarise(meanPercent=mean(Percent)) #show me      the means
+```
+## now taking the average across all of the cover types 
+```{r}
+cover %>% 
+  summarise(meanPercent=mean(Percent))
 ```
 
