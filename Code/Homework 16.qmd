@@ -19,7 +19,7 @@ Create a new data frame using the donnerville data
 cover <- read.csv(here("data","donnerville_percent_cover.csv"))
 ```
 
-Take peak of data in two ways I will be using the glimpse and structure fuctions to do so
+Take peak of data in two ways. I will be using the glimpse and structure functions to do so
 
 ```{r}
 glimpse(cover)
@@ -35,7 +35,7 @@ cover$cover_type <- as.factor(cover$cover_type)
 ```
 
 ## transform date into date variable 
-I'm doing so by reassigning the value of Date to consist of only numbers and then I will use the dmy() function to convert it's type to date
+I'm doing so by reassigning the value of Date to consist of only numbers and then I will use the mdy() function to convert it's type to date
 
 ```{r}
 fix_date <-which(cover$Date == "13-Sep-17") #make new data frame with all of the date listing of 13-Sep-17. Coincidentally, this is all of them
