@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Evelyn Albrecht">
+
+<title>Homework 15</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Homework 15_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Homework 15_files/libs/quarto-html/quarto.js"></script>
+<script src="Homework 15_files/libs/quarto-html/popper.min.js"></script>
+<script src="Homework 15_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Homework 15_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Homework 15_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Homework 15_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Homework 15_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Homework 15_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Homework 15_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 15</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Evelyn Albrecht </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="chapter-3-data-management-manipulation-and-exploration-with-dplyr" class="level1">
+<h1>Chapter 3: Data Management, Manipulation, and Exploration with dplyr</h1>
+<section id="working-through-chapter-three-of-the-class-text-getting-started-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="working-through-chapter-three-of-the-class-text-getting-started-with-r">working through chapter three of the class text “Getting Started With R”</h2>
+<p>This is Homework 15 for BIO303-Biostats</p>
+<p>Setting things up - clearing the environment and opening packages</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"here"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'here' was built under R version 4.3.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at C:/Users/Evelyn/OneDrive - St. Lawrence University/BIO 303/R_projects/Classwork/Albrecht-Biostats-HW</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Introduction to the dplyr package - does various common data manipulations (ex. clac mean and stdev)</p>
+<p>Import data (fruit and grazing! yay!)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"Data"</span>,<span class="st">"compensation.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Root  Fruit  Grazing
+1   6.225  59.77 Ungrazed
+2   6.487  60.98 Ungrazed
+3   4.919  14.73 Ungrazed
+4   5.130  19.28 Ungrazed
+5   5.417  34.25 Ungrazed
+6   5.359  35.53 Ungrazed
+7   7.614  87.73 Ungrazed
+8   6.352  63.21 Ungrazed
+9   4.975  24.25 Ungrazed
+10  6.930  64.34 Ungrazed
+11  6.248  52.92 Ungrazed
+12  5.451  32.35 Ungrazed
+13  6.013  53.61 Ungrazed
+14  5.928  54.86 Ungrazed
+15  6.264  64.81 Ungrazed
+16  7.181  73.24 Ungrazed
+17  7.001  80.64 Ungrazed
+18  4.426  18.89 Ungrazed
+19  7.302  75.49 Ungrazed
+20  5.836  46.73 Ungrazed
+21 10.253 116.05   Grazed
+22  6.958  38.94   Grazed
+23  8.001  60.77   Grazed
+24  9.039  84.37   Grazed
+25  8.910  70.11   Grazed
+26  6.106  14.95   Grazed
+27  7.691  70.70   Grazed
+28  8.988  80.31   Grazed
+29  8.975  82.35   Grazed
+30  9.844 105.07   Grazed
+31  8.508  73.79   Grazed
+32  7.354  50.08   Grazed
+33  8.643  78.28   Grazed
+34  7.916  41.48   Grazed
+35  9.351  98.47   Grazed
+36  7.066  40.15   Grazed
+37  8.158  52.26   Grazed
+38  7.382  46.64   Grazed
+39  8.515  71.01   Grazed
+40  8.530  83.03   Grazed</code></pre>
+</div>
+</div>
+</section>
+<section id="summary-statistics-for-each-variable" class="level2">
+<h2 class="anchored" data-anchor-id="summary-statistics-for-each-variable">3.1 Summary statistics for each variable</h2>
+<p>want to get a feeling for what the data looks like in terms of rows and columns using glimpse</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>compensation<span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"Data"</span>,<span class="st">"compensation.csv"</span>)) <span class="co">#assigning character</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(compensation) <span class="co">#take a peak</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 40
+Columns: 3
+$ Root    &lt;dbl&gt; 6.225, 6.487, 4.919, 5.130, 5.417, 5.359, 7.614, 6.352, 4.975,…
+$ Fruit   &lt;dbl&gt; 59.77, 60.98, 14.73, 19.28, 34.25, 35.53, 87.73, 63.21, 24.25,…
+$ Grazing &lt;chr&gt; "Ungrazed", "Ungrazed", "Ungrazed", "Ungrazed", "Ungrazed", "U…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get summary stats for compensation variables </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(compensation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Root            Fruit          Grazing         
+ Min.   : 4.426   Min.   : 14.73   Length:40         
+ 1st Qu.: 6.083   1st Qu.: 41.15   Class :character  
+ Median : 7.123   Median : 60.88   Mode  :character  
+ Mean   : 7.181   Mean   : 59.41                     
+ 3rd Qu.: 8.510   3rd Qu.: 76.19                     
+ Max.   :10.253   Max.   :116.05                     </code></pre>
+</div>
+</div>
+<p>summary() gives us median, mean, interquartile range, minimum and maximum for all columns</p>
+</section>
+<section id="dplyr-verbs" class="level2">
+<h2 class="anchored" data-anchor-id="dplyr-verbs">3.2 dplyr verbs</h2>
+<p>there is a bunch of verb functions. I am going to transcribe them into my function spreadsheet REMEMBER THAT THE FIRST ARGUMENT TO ALL dplyr FUNCTIONS IS THE DATA FRAME</p>
+</section>
+<section id="subsetting" class="level2">
+<h2 class="anchored" data-anchor-id="subsetting">3.3 Subsetting</h2>
+<p>3.3.1 grab a column</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(compensation, Fruit) <span class="co">#use the fruit column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Fruit
+1   59.77
+2   60.98
+3   14.73
+4   19.28
+5   34.25
+6   35.53
+7   87.73
+8   63.21
+9   24.25
+10  64.34
+11  52.92
+12  32.35
+13  53.61
+14  54.86
+15  64.81
+16  73.24
+17  80.64
+18  18.89
+19  75.49
+20  46.73
+21 116.05
+22  38.94
+23  60.77
+24  84.37
+25  70.11
+26  14.95
+27  70.70
+28  80.31
+29  82.35
+30 105.07
+31  73.79
+32  50.08
+33  78.28
+34  41.48
+35  98.47
+36  40.15
+37  52.26
+38  46.64
+39  71.01
+40  83.03</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(compensation, <span class="sc">-</span>Root) <span class="co">#selects every column except that which follows the "-"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Fruit  Grazing
+1   59.77 Ungrazed
+2   60.98 Ungrazed
+3   14.73 Ungrazed
+4   19.28 Ungrazed
+5   34.25 Ungrazed
+6   35.53 Ungrazed
+7   87.73 Ungrazed
+8   63.21 Ungrazed
+9   24.25 Ungrazed
+10  64.34 Ungrazed
+11  52.92 Ungrazed
+12  32.35 Ungrazed
+13  53.61 Ungrazed
+14  54.86 Ungrazed
+15  64.81 Ungrazed
+16  73.24 Ungrazed
+17  80.64 Ungrazed
+18  18.89 Ungrazed
+19  75.49 Ungrazed
+20  46.73 Ungrazed
+21 116.05   Grazed
+22  38.94   Grazed
+23  60.77   Grazed
+24  84.37   Grazed
+25  70.11   Grazed
+26  14.95   Grazed
+27  70.70   Grazed
+28  80.31   Grazed
+29  82.35   Grazed
+30 105.07   Grazed
+31  73.79   Grazed
+32  50.08   Grazed
+33  78.28   Grazed
+34  41.48   Grazed
+35  98.47   Grazed
+36  40.15   Grazed
+37  52.26   Grazed
+38  46.64   Grazed
+39  71.01   Grazed
+40  83.03   Grazed</code></pre>
+</div>
+</div>
+<p>3.3.2 slice() - Grab rows</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(compensation, <span class="dv">2</span>) <span class="co"># gives us second row</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Root Fruit  Grazing
+1 6.487 60.98 Ungrazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(compensation, <span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>) <span class="co">#gives us rows 2 through 10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Root Fruit  Grazing
+1 6.487 60.98 Ungrazed
+2 4.919 14.73 Ungrazed
+3 5.130 19.28 Ungrazed
+4 5.417 34.25 Ungrazed
+5 5.359 35.53 Ungrazed
+6 7.614 87.73 Ungrazed
+7 6.352 63.21 Ungrazed
+8 4.975 24.25 Ungrazed
+9 6.930 64.34 Ungrazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slice</span>(compensation, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">10</span>)) <span class="co">#gives us multiple disconnected rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Root Fruit  Grazing
+1 6.487 60.98 Ungrazed
+2 4.919 14.73 Ungrazed
+3 6.930 64.34 Ungrazed</code></pre>
+</div>
+</div>
+<p>3.3.3 filter - logical operators</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(compensation, Fruit<span class="sc">&gt;</span><span class="dv">80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
+[13] FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE
+[25] FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE
+[37] FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+<p>using filter</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit<span class="sc">&gt;</span><span class="dv">80</span>) <span class="co">#finds the rows where it is true that Fruit is &gt;80 and returns them as a data frame </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Root  Fruit  Grazing
+1  7.614  87.73 Ungrazed
+2  7.001  80.64 Ungrazed
+3 10.253 116.05   Grazed
+4  9.039  84.37   Grazed
+5  8.988  80.31   Grazed
+6  8.975  82.35   Grazed
+7  9.844 105.07   Grazed
+8  9.351  98.47   Grazed
+9  8.530  83.03   Grazed</code></pre>
+</div>
+</div>
+<p>Table 3.1 examples</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit<span class="sc">==</span><span class="dv">80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Root    Fruit   Grazing
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit <span class="sc">!=</span><span class="dv">80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Root  Fruit  Grazing
+1   6.225  59.77 Ungrazed
+2   6.487  60.98 Ungrazed
+3   4.919  14.73 Ungrazed
+4   5.130  19.28 Ungrazed
+5   5.417  34.25 Ungrazed
+6   5.359  35.53 Ungrazed
+7   7.614  87.73 Ungrazed
+8   6.352  63.21 Ungrazed
+9   4.975  24.25 Ungrazed
+10  6.930  64.34 Ungrazed
+11  6.248  52.92 Ungrazed
+12  5.451  32.35 Ungrazed
+13  6.013  53.61 Ungrazed
+14  5.928  54.86 Ungrazed
+15  6.264  64.81 Ungrazed
+16  7.181  73.24 Ungrazed
+17  7.001  80.64 Ungrazed
+18  4.426  18.89 Ungrazed
+19  7.302  75.49 Ungrazed
+20  5.836  46.73 Ungrazed
+21 10.253 116.05   Grazed
+22  6.958  38.94   Grazed
+23  8.001  60.77   Grazed
+24  9.039  84.37   Grazed
+25  8.910  70.11   Grazed
+26  6.106  14.95   Grazed
+27  7.691  70.70   Grazed
+28  8.988  80.31   Grazed
+29  8.975  82.35   Grazed
+30  9.844 105.07   Grazed
+31  8.508  73.79   Grazed
+32  7.354  50.08   Grazed
+33  8.643  78.28   Grazed
+34  7.916  41.48   Grazed
+35  9.351  98.47   Grazed
+36  7.066  40.15   Grazed
+37  8.158  52.26   Grazed
+38  7.382  46.64   Grazed
+39  8.515  71.01   Grazed
+40  8.530  83.03   Grazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit <span class="sc">&lt;=</span><span class="dv">80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Root Fruit  Grazing
+1  6.225 59.77 Ungrazed
+2  6.487 60.98 Ungrazed
+3  4.919 14.73 Ungrazed
+4  5.130 19.28 Ungrazed
+5  5.417 34.25 Ungrazed
+6  5.359 35.53 Ungrazed
+7  6.352 63.21 Ungrazed
+8  4.975 24.25 Ungrazed
+9  6.930 64.34 Ungrazed
+10 6.248 52.92 Ungrazed
+11 5.451 32.35 Ungrazed
+12 6.013 53.61 Ungrazed
+13 5.928 54.86 Ungrazed
+14 6.264 64.81 Ungrazed
+15 7.181 73.24 Ungrazed
+16 4.426 18.89 Ungrazed
+17 7.302 75.49 Ungrazed
+18 5.836 46.73 Ungrazed
+19 6.958 38.94   Grazed
+20 8.001 60.77   Grazed
+21 8.910 70.11   Grazed
+22 6.106 14.95   Grazed
+23 7.691 70.70   Grazed
+24 8.508 73.79   Grazed
+25 7.354 50.08   Grazed
+26 8.643 78.28   Grazed
+27 7.916 41.48   Grazed
+28 7.066 40.15   Grazed
+29 8.158 52.26   Grazed
+30 7.382 46.64   Grazed
+31 8.515 71.01   Grazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit <span class="sc">&gt;</span><span class="dv">80</span> <span class="sc">|</span> Fruit <span class="sc">&lt;</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Root  Fruit  Grazing
+1   4.919  14.73 Ungrazed
+2   5.130  19.28 Ungrazed
+3   7.614  87.73 Ungrazed
+4   7.001  80.64 Ungrazed
+5   4.426  18.89 Ungrazed
+6  10.253 116.05   Grazed
+7   9.039  84.37   Grazed
+8   6.106  14.95   Grazed
+9   8.988  80.31   Grazed
+10  8.975  82.35   Grazed
+11  9.844 105.07   Grazed
+12  9.351  98.47   Grazed
+13  8.530  83.03   Grazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(compensation, Fruit <span class="sc">&gt;</span><span class="dv">80</span> <span class="sc">&amp;</span> Fruit <span class="sc">&lt;</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] Root    Fruit   Grazing
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+</div>
+<p>3.3.4 make sure to assign names to the data frames you are making</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>lo_hi_fruit <span class="ot">&lt;-</span> <span class="fu">filter</span>(compensation, Fruit <span class="sc">&gt;</span><span class="dv">80</span> <span class="sc">|</span> Fruit <span class="sc">&lt;</span><span class="dv">20</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>lo_hi_fruit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Root  Fruit  Grazing
+1   4.919  14.73 Ungrazed
+2   5.130  19.28 Ungrazed
+3   7.614  87.73 Ungrazed
+4   7.001  80.64 Ungrazed
+5   4.426  18.89 Ungrazed
+6  10.253 116.05   Grazed
+7   9.039  84.37   Grazed
+8   6.106  14.95   Grazed
+9   8.988  80.31   Grazed
+10  8.975  82.35   Grazed
+11  9.844 105.07   Grazed
+12  9.351  98.47   Grazed
+13  8.530  83.03   Grazed</code></pre>
+</div>
+</div>
+</section>
+<section id="transforming" class="level2">
+<h2 class="anchored" data-anchor-id="transforming">3.4 Transforming</h2>
+<p>3.4.1 mutate() makes new column out of info from data frame head() limits the amount of rows we see</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(compensation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Root Fruit  Grazing
+1 6.225 59.77 Ungrazed
+2 6.487 60.98 Ungrazed
+3 4.919 14.73 Ungrazed
+4 5.130 19.28 Ungrazed
+5 5.417 34.25 Ungrazed
+6 5.359 35.53 Ungrazed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>compensation <span class="ot">&lt;-</span> <span class="fu">mutate</span>(compensation, <span class="at">logfruit=</span><span class="fu">log</span>(Fruit)) <span class="co">#add new column </span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(compensation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Root Fruit  Grazing logfruit
+1 6.225 59.77 Ungrazed 4.090504
+2 6.487 60.98 Ungrazed 4.110546
+3 4.919 14.73 Ungrazed 2.689886
+4 5.130 19.28 Ungrazed 2.959068
+5 5.417 34.25 Ungrazed 3.533687
+6 5.359 35.53 Ungrazed 3.570377</code></pre>
+</div>
+</div>
+</section>
+<section id="sorting" class="level2">
+<h2 class="anchored" data-anchor-id="sorting">3.5 Sorting</h2>
+<p>3.5.1 arrange() putting observations into a certain order</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(compensation, Fruit) <span class="co">#arranges rows in terms of increasing fruit production</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Root  Fruit  Grazing logfruit
+1   4.919  14.73 Ungrazed 2.689886
+2   6.106  14.95   Grazed 2.704711
+3   4.426  18.89 Ungrazed 2.938633
+4   5.130  19.28 Ungrazed 2.959068
+5   4.975  24.25 Ungrazed 3.188417
+6   5.451  32.35 Ungrazed 3.476614
+7   5.417  34.25 Ungrazed 3.533687
+8   5.359  35.53 Ungrazed 3.570377
+9   6.958  38.94   Grazed 3.662022
+10  7.066  40.15   Grazed 3.692622
+11  7.916  41.48   Grazed 3.725211
+12  7.382  46.64   Grazed 3.842459
+13  5.836  46.73 Ungrazed 3.844386
+14  7.354  50.08   Grazed 3.913622
+15  8.158  52.26   Grazed 3.956231
+16  6.248  52.92 Ungrazed 3.968781
+17  6.013  53.61 Ungrazed 3.981736
+18  5.928  54.86 Ungrazed 4.004784
+19  6.225  59.77 Ungrazed 4.090504
+20  8.001  60.77   Grazed 4.107096
+21  6.487  60.98 Ungrazed 4.110546
+22  6.352  63.21 Ungrazed 4.146463
+23  6.930  64.34 Ungrazed 4.164182
+24  6.264  64.81 Ungrazed 4.171460
+25  8.910  70.11   Grazed 4.250065
+26  7.691  70.70   Grazed 4.258446
+27  8.515  71.01   Grazed 4.262821
+28  7.181  73.24 Ungrazed 4.293742
+29  8.508  73.79   Grazed 4.301223
+30  7.302  75.49 Ungrazed 4.324000
+31  8.643  78.28   Grazed 4.360292
+32  8.988  80.31   Grazed 4.385894
+33  7.001  80.64 Ungrazed 4.389995
+34  8.975  82.35   Grazed 4.410978
+35  8.530  83.03   Grazed 4.419202
+36  9.039  84.37   Grazed 4.435212
+37  7.614  87.73 Ungrazed 4.474264
+38  9.351  98.47   Grazed 4.589752
+39  9.844 105.07   Grazed 4.654627
+40 10.253 116.05   Grazed 4.754021</code></pre>
+</div>
+</div>
+</section>
+<section id="mini-summary-and-two-top-tips" class="level2">
+<h2 class="anchored" data-anchor-id="mini-summary-and-two-top-tips">3.6 Mini-summary and two top tips</h2>
+<p>Top Tip 1: you can use more than one dpylr function at once ex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="fu">filter</span>(compensation, Fruit <span class="sc">&gt;</span><span class="dv">80</span>), Root)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Root
+1  7.614
+2  7.001
+3 10.253
+4  9.039
+5  8.988
+6  8.975
+7  9.844
+8  9.351
+9  8.530</code></pre>
+</div>
+</div>
+<p>Top Tip 2: dpylr is magic pipe -put the answer og the left hand command into the function on the right</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#find root values from Fruit&gt;80 subset using piping</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>compensation <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Fruit<span class="sc">&gt;</span><span class="dv">80</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Root) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Root
+1  7.614
+2  7.001
+3 10.253
+4  9.039
+5  8.988
+6  8.975
+7  9.844
+8  9.351
+9  8.530</code></pre>
+</div>
+</div>
+</section>
+<section id="calculating-summary-statistics-about-groups-of-your-data" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-summary-statistics-about-groups-of-your-data">3.7 Calculating summary statistics about groups of your data</h2>
+<p>3.7.1 summarizing occurs in a series of steps 1. Declare the Data Frame and what the grouping variable is 2. Provide some kind of math function with which to summarize the data 3. Make a nice name for the values returned 4. Make R use all of this information</p>
+<p>3.7.2 Method 1: Nested approach - no piping</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(<span class="fu">group_by</span>(compensation, Grazing),<span class="at">meanFruit =</span> <span class="fu">mean</span>(Fruit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Grazing  meanFruit
+  &lt;chr&gt;        &lt;dbl&gt;
+1 Grazed        67.9
+2 Ungrazed      50.9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>mean.fruit <span class="ot">&lt;-</span><span class="fu">summarise</span>(<span class="fu">group_by</span>(compensation, Grazing),<span class="at">meanFruit =</span> <span class="fu">mean</span>(Fruit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Method 2: Piping approach - no nesting</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>compensation <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Grazing) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanfruit=</span><span class="fu">mean</span>(Fruit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Grazing  meanfruit
+  &lt;chr&gt;        &lt;dbl&gt;
+1 Grazed        67.9
+2 Ungrazed      50.9</code></pre>
+</div>
+</div>
+<p>3.7.4 you can group by any categorical variable and perform any summary statistics in doing this can also get more than on statistic at once</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>compensation <span class="sc">%&gt;%</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>((Grazing)) <span class="sc">%&gt;%</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanFruit=</span><span class="fu">mean</span>(Fruit), <span class="at">sdFruit=</span><span class="fu">sd</span>(Fruit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  `(Grazing)` meanFruit sdFruit
+  &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+1 Grazed           67.9    25.0
+2 Ungrazed         50.9    21.8</code></pre>
+</div>
+</div>
+</section>
+<section id="what-have-you-learned-lots" class="level2">
+<h2 class="anchored" data-anchor-id="what-have-you-learned-lots">3.8 What have you learned … lots</h2>
+<p>I have indeed learned a lot.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
