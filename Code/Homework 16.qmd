@@ -1,0 +1,38 @@
+---
+title: "Homework 16"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+Setting up - clear R's environment and open packages 
+```{r}
+rm(list=ls())
+library(tidyverse)
+library("here")
+```
+
+Create a new data frame using the donnerville data
+```{r}
+cover <- read.csv(here("data","donnerville_percent_cover.csv"))
+```
+
+Take peak of data in two ways 
+I will be using the glimpse and structure fuctions to do so
+```{r}
+glimpse(cover)
+str(cover)
+```
+
+convert Site, Plot.type and cover_type into factor variables
+```{r}
+cover$Site <-as.factor(cover$Site)
+cover$Plot.type <- as.factor(cover$Plot.type)
+cover$cover_type <- as.factor(cover$cover_type)
+```
+
+transform date into date variable 
+```{r}
+
+```
+
