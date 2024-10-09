@@ -73,20 +73,31 @@ levels(cover$cover_type)
 ```
 
 ## Determining the average percent cover by cover type for Donnerville 1
-```{r}
 
-```
-
+Mess up work (just keeping)
 ```{r}
 cover %>% #within the cover data frame
   group_by(cover_type) %>% #sorting out means of     percent by the cover type
+  filter(Site == "Donnerville 1")
   summarise(meanPercent=mean(Percent)) #show me      the means
 ```
+I'm a tad stuck :(
+
+I figured it out... I think
+```{r}
+Percent1 <- select(filter(cover, Site=="Donnerville 1"),Percent,cover_type) #isolating the data for only Donnerville 1
+Percent1 %>% #within this data frame
+  group_by(cover_type) %>% #for each cover type
+  summarise (meanPercent=mean(Percent)) #give me the mean percent coverage 
+
+```
+
 ## Determine the average percent vascular plant cover across all sites
 ```{r}
-cover %>% 
-  group_by(Site)%>%
-  filter(cover_type == Vascular) %>%
-  summarise(meanPercent = mean(Percent))
+Vasc1 <- select(filter(cover,cover_type== "Vascular"),Percent, Site) #create new data frame for percent cover and site for only vascular plants
+Vasc1 %>% #within this data frame
+  group_by(Site) %>% #show me by site
+  summarise(meanPercent=mean(Percent)) #ther average percent coverage
 ```
+I was stuck on this one too but it ended up I forgot to add a ")" :/ 
 
