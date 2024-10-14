@@ -1,0 +1,185 @@
+---
+title: "Homework 18"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+set up, read in data, and take a peak
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library("here")
+compensation <- read.csv(here("data","compensation.csv"))
+glimpse(compensation)
+```
+
+# 4.1 - The first step in every data analysis  - making a picture 
+
+always start an analysis with a picture to get a sense of wether your expected pattern matches the one that your data supplies.
+
+three major types of figures
+
+-   scatterplot
+
+-   box-and-whisker plot
+
+-   histogram
+
+# 4.2 - ggplot2 - a grammar for graphics
+
+this chapter centers around ggplot2 - this is included in the tidyverse package
+
+## 4.2.1 - making a picture - scatterplots 
+
+make a simple scatterplot
+
+aes() - aesthetics
+
+ggplot2 works by adding layers and components to the aesthetic map.
+
+geom_point() - genomic layer - points
+
+use enter following "+", + adds new components to the map
+
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit)) +
+  geom_point() # make a plot, with these axes, 
+```
+
+## 4.2.2 - interpretation, then customize
+
+positive correlation begtween the fruit values and rootstock width. Two groups demonstrating the two different treatments.
+
+customizing the data! we will learn how to get rid of the grey background, alter the size of the points and text, and make colors correspond to groups.
+
+## 4.2.3 - that grey background
+
+lets make some changes!
+
+lets get rid of the grey!!
+
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit)) +
+  geom_point() + 
+  theme_bw() #theme. have them as the last component of the ggplot()
+```
+
+Increase size of the text
+
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit)) +
+  geom_point(size=5) + #change size of points 
+  theme_bw()
+```
+
+add axes
+
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit)) + 
+  geom_point(size = 5) + 
+  xlab("Root Biomass") + # assign x-axis
+  ylab("Fruit Production") + #assign y-axis
+  theme_bw()
+```
+
+Color coordinate treatments
+
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit, colour = Grazing)) + #you could also do shape = Grazing to obtain the same effect
+  geom_point(size = 5) + 
+  xlab("Root Biomass") + 
+  ylab("Fruit Production") + 
+  theme_bw()
+```
+
+# 4.3 - Box-and-whisker plots
+
+scatter plots are cool but box-an-whisker plots do some things better in terms of presenting data
+
+lets plot the relationship between the grazing treatments and fruit production in a box plot
+
+```{r}
+ggplot(compensation, aes(x = Grazing, y= Fruit)) + 
+  geom_boxplot() + 
+  xlab("Grazing treatment") + 
+  ylab("Fruit Production") + 
+  theme_bw()
+```
+
+add some customization
+
+```{r}
+ggplot(compensation, aes(x = Grazing, y= Fruit)) + 
+  geom_boxplot() + 
+  geom_point(size=4, colour="lightgrey", alpha=0.5) + #alpha changes the transparency of the points
+  xlab("Grazing treatment") + 
+  ylab("Fruit Production") + 
+  theme_bw()
+```
+
+## 4.3.1 - A moment of interpretative contemplation
+
+I think the book just made a Star Wars reference
+
+Plants with wider root diameters produce more fruit
+
+grazed plants produce more fruit
+
+# 4.4 Distributions - making histograms of numeric variables 
+
+Histograms show distributions
+
+computer produces the Y-axis for you in a histogram, therefore we only need to assign the x-axis in the aes()
+
+making a histogram of fruit production
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram()
+
+##'Stat_bin()' using 'bins = 30'. pick a better value with 'binwidth' 
+##'idk what that means. hopefully it will be cleared up
+```
+
+the book called this ugly :(
+
+we need to change the binwidth
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram(bins = 10)
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram(binwidth = 15)
+```
+
+## 4.4.1 A nifty tool - facets
+
+"faceting is about producing a matrix of graphs, automatically structured by a factor/categorical variable in your data"
+
+use facet_wrap() to divide data by treatment
+
+"\~" is the grouping variable
+
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram(binwidth = 15) + 
+  facet_wrap(~Grazing) 
+```
+
+# 4.5 Saving your graphs for presentation, documents, etc. 
+
+plots tab has an export button you can use to save
+
+you can also use ggsave()
+
+lets try
+
+```{r}
+ggsave("thatcoolhistogramoffruit.png")
+```
+
+# 4.6 Closing remarks 
+
+There was a pun
