@@ -1,0 +1,25 @@
+---
+title: "Homework feedback"
+format: html
+editor: visual
+---
+
+## Homework feedback
+
+### Homework 16
+
+You have a problem that I referenced in the email I sent to the class today (17 October) in that the data file you are trying to load does not exist. In your case, in your project, the data folder is called `Data` but your code on line 19 of your .qmd calls `cover <- read.csv(here("data", "donnerville_percent_cover.csv"))`. But the folder `data` does not exist.
+
+It is **essential** that the Rstudio projects you submit for homework, problem sets, or the capstone data analysis project include, encapsulated within the repository, all of the files needed for the user (in this case, me, but sometimes future you). So I am taking of a point and will take points off on future homeworks if this problem persists. PLEASE see me if you are having any trouble.
+
+I read through (though could not run) the rest of your code.
+
+On lines 41 - 15 you are using the wrong approach with the date. You just need line 44 - the rest is just noise.
+
+I'm glad you include sections like the one called "mess up work" and that you tell me you are stuck or that you figured it out in the .qmd. Keep it up!
+
+See the key for this homework to see a better solution to what you have at lines 94 - 99
+
+### Homework 18
+
+I really appreciate all of the detail you added to your .qmd. Keep it up!

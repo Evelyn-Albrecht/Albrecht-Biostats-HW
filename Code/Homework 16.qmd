@@ -26,7 +26,7 @@ glimpse(cover)
 str(cover)
 ```
 
-### convert Site, Plot.type and cover_type into factor variables 
+### convert Site, Plot.type and cover_type into factor variables
 
 ```{r}
 cover$Site <-as.factor(cover$Site)
@@ -34,7 +34,8 @@ cover$Plot.type <- as.factor(cover$Plot.type)
 cover$cover_type <- as.factor(cover$cover_type)
 ```
 
-## transform date into date variable 
+## transform date into date variable
+
 I'm doing so by reassigning the value of Date to consist of only numbers and then I will use the mdy() function to convert it's type to date
 
 ```{r}
@@ -48,6 +49,7 @@ cover$Date <- mdy(cover$Date) #indicate to r that the "character" is in a date f
 I found a few discrepancies in the listing of the same level. I will now correct these using the which() function.
 
 correcting sites
+
 ```{r}
 levels(cover$Site)
 fix_site1 <- which(cover$Site %in% c("donnerville 1","DONNERVILLE - 1", "Donnerville 1")) #making a data frame for rows that have these values 
@@ -59,7 +61,9 @@ cover$Site[fix_site3] <- "Donnerville 3"
 cover$Site <- factor(cover$Site) #remind R that there are now 3 levels by doing this 
 levels(cover$Site)
 ```
+
 now doing the same thing for cover type
+
 ```{r}
 levels(cover$cover_type)
 fix_cover1 <- which(cover$cover_type %in% c("bare","Bare"))
@@ -75,15 +79,18 @@ levels(cover$cover_type)
 ## Determining the average percent cover by cover type for Donnerville 1
 
 Mess up work (just keeping)
+
 ```{r}
 cover %>% #within the cover data frame
   group_by(cover_type) %>% #sorting out means of     percent by the cover type
   filter(Site == "Donnerville 1")
   summarise(meanPercent=mean(Percent)) #show me      the means
 ```
+
 I'm a tad stuck :(
 
 I figured it out... I think
+
 ```{r}
 Percent1 <- select(filter(cover, Site=="Donnerville 1"),Percent,cover_type) #isolating the data for only Donnerville 1
 Percent1 %>% #within this data frame
@@ -93,11 +100,12 @@ Percent1 %>% #within this data frame
 ```
 
 ## Determine the average percent vascular plant cover across all sites
+
 ```{r}
 Vasc1 <- select(filter(cover,cover_type== "Vascular"),Percent, Site) #create new data frame for percent cover and site for only vascular plants
 Vasc1 %>% #within this data frame
   group_by(Site) %>% #show me by site
   summarise(meanPercent=mean(Percent)) #ther average percent coverage
 ```
-I was stuck on this one too but it ended up I forgot to add a ")" :/ 
 
+I was stuck on this one too but it ended up I forgot to add a ")" :/

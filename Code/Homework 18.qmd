@@ -15,7 +15,7 @@ compensation <- read.csv(here("data","compensation.csv"))
 glimpse(compensation)
 ```
 
-# 4.1 - The first step in every data analysis  - making a picture 
+# 4.1 - The first step in every data analysis - making a picture
 
 always start an analysis with a picture to get a sense of wether your expected pattern matches the one that your data supplies.
 
@@ -31,7 +31,7 @@ three major types of figures
 
 this chapter centers around ggplot2 - this is included in the tidyverse package
 
-## 4.2.1 - making a picture - scatterplots 
+## 4.2.1 - making a picture - scatterplots
 
 make a simple scatterplot
 
@@ -127,7 +127,7 @@ Plants with wider root diameters produce more fruit
 
 grazed plants produce more fruit
 
-# 4.4 Distributions - making histograms of numeric variables 
+# 4.4 Distributions - making histograms of numeric variables
 
 Histograms show distributions
 
@@ -168,7 +168,7 @@ ggplot(compensation, aes(x = Fruit)) +
   facet_wrap(~Grazing) 
 ```
 
-# 4.5 Saving your graphs for presentation, documents, etc. 
+# 4.5 Saving your graphs for presentation, documents, etc.
 
 plots tab has an export button you can use to save
 
@@ -180,6 +180,6 @@ lets try
 ggsave("thatcoolhistogramoffruit.png")
 ```
 
-# 4.6 Closing remarks 
+# 4.6 Closing remarks
 
 There was a pun
