@@ -1,0 +1,11 @@
+---
+title: "hw feedback"
+format: html
+editor: visual
+---
+
+### HW 20 feedback
+
+Unfortunately, you do not have the data associated with this homework in your data folder, so I am unable to run your code and therefore cannot give you credit for this homework (as was indicated in the homework assignment.) PLEASE PLEASE PLEASE MAKE SURE THAT YOU HAVE ALL OF THE NECESSARY DATA FILES AS PART OF YOUR PROJECT AND LOCATED IN YOUR DATA FOLDER every time you submit an R assignment.
+
+Otherwise, I think your code looks pretty good.
