@@ -1,0 +1,169 @@
+---
+title: "Homework 21"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+# 5.1 Getting started doing statistic in R
+
+always start with a picture - see expectedc pattern vital not to interpret the results once weves specified the model in R. we instead assess the assumptions of the model (ie normal distribution) making sure that out analysis outcomes are reliable ONLY THEN CAN YOU INTERPRET THE DATA
+
+workflow - plot the data\
+- build model - check assumptions - interpret model - replot the data and the model
+
+go aquire knowledge on stats they are assuming I know a lot more than I do :(
+
+# 5.2 - X\^2 contingency table analysis 
+
+## 5.2.1 The data: ladybirds 
+
+go aquire knowledge on stats they are assuming I know a lot more than I do :(
+
+chi-squared contingency table deals with count data more than one categorical variable
+
+looking at industrialization and ladybird morphs null hypothesis
+
+set up and read in data
+
+```{r}
+# My first chi-square analysis 
+
+rm(list=ls())
+library(tidyverse)
+library("here")
+
+ladybirds <- read.csv(here("Data","ladybirds.csv"))
+
+glimpse(ladybirds)
+```
+
+idk how to change variable names :( I figured it out!!!!
+
+```{r}
+colnames(ladybirds)[3] <- "Colour"
+colnames(ladybirds)[4] <- "Number"
+```
+
+calculating totals use for the chi-squared using dplyr
+
+## 5.2.2 Organizing the data for plotting and analysis
+
+group_by and summarise() time!
+
+```{r}
+totals <- ladybirds %>% #within ladybirds dataframe 
+  group_by(Habitat, Colour) %>% #group by variables of color and habitat
+  summarise(total.number = sum(Number)) #and obtain the total number of each combination (there are 4)
+```
+
+now makes a bar chart
+
+```{r}
+ggplot(totals, aes(x=Habitat, y=total.number, fill=Colour)) + 
+  geom_bar(stat = 'identity', position = 'dodge') #I don't know what the fill, stat, and position verbs do 
+```
+
+## 5.2.3 New ggplot() detail
+
+bar charts are okay for count data not summarizing a distribution counts are ratio data
+
+now they explain the verbs fill = fills with a color when the geometery is fit for it stat = 'identity' - tells ggplot to not try and calculate anything position = 'dodge' - tells r to put the two bars for the treatment next to eacother
+
+## 5.2.4 Fixing the colours 
+
+lets change colors to make more sense
+
+```{r} ggplot(totals, aes(x=Habitat, y=total.number, fill=Colour)) +    geom_bar(stat = 'identity', position = 'dodge') +    scale_fill_manual(values = c(black="black", red="red"))}
+```
+
+## 5.2.5 Interpreting the graph (guess the answer before we do the stats 
+
+do we think this bar graph support our null hypothesis?
+
+## 5.2.6 Making the X\^2 test 
+
+using chi-squared - chisq.test()
+
+using dpylr again
+
+```{r}
+ladybirds_matrix <- xtabs(Number ~ Habitat + Colour, data = ladybirds) #please cross tabulate
+view(ladybirds_matrix)
+#Its not working
+#I figured it out. forgot to capitalize number
+```
+
+Now run a chi-squared test
+
+```{r}
+chisq.test(ladybirds_matrix)
+```
+
+## 5.2.7 From data to statistics: an overview
+
+gives us all we need to present our results this allows us to reject the null hypothesis. there seems to be relationship between ladybird morphs and habitat.
+
+we can assign a variable to the outputs of the chi-squared test
+
+```{r}
+ladybirds.chi <- chisq.test(ladybirds_matrix)
+names(ladybirds.chi)
+ladybirds.chi$expected
+```
+
+# 5.3 Two-sample t-test data
+
+## 5.3.1 The t-test data
+
+Two main points
+
+## 5.3.2 The first step: plot your data
+
+ozone garden data use now too much ozone makes lettuce taste bad
+
+lets import this data as a dataframe
+
+```{r}
+ozone <- read.csv(here("Data","ozone.csv"))
+glimpse(ozone)
+```
+
+## 5.3.3 The two-sample t-test analysis 
+
+5.3.2 plot the data first step is to make a figure use a combination of facets and histograms to create a plot of the data
+
+```{r}
+ggplot(ozone, aes(x= Ozone)) +
+  geom_histogram(binwidth = 10) + 
+  facet_wrap(~ Garden.location, ncol = 1) + 
+  theme_bw()
+```
+
+there is a lot of overlap so we are going to need some statistics make some code with dplyr to find mean and standard deviation.
+
+```{r}
+
+```
+
+how do ozone levels differ as a function of location?
+
+```{r}
+t.test(Ozone ~ Garden.location, data = ozone)
+```
+
+interpret the output
+
+-95% confidence interval level difference around the two means
+
+welch
+
+var.test() has the same function as the T-test
+
+```{r}
+var.test(Ozone ~ Garden.location, data=ozone)
+```
+
+## 5.3.4 t-test summary
+
+often assumed to be easy. Don't let a good workflow make you forget to do your plotting and evaluate your assumptions
