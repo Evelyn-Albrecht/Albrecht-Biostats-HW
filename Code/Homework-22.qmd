@@ -1,0 +1,84 @@
+---
+title: "Homework 22 - Chi-square test review"
+format: html
+editor: visual
+---
+
+Today's homework asks you to think a little more deeply about how to conduct a chi-square test of association (also called a contingency analysis or contingency table).
+
+I am providing real data from a paper that examined the effectiveness of covid vaccination status ("Fully vaccinated" and "Not vaccinated") on the frequency (i.e. count) survival vs. death ("Lived" vs. "Died") from covid in patients coming to the emergency room of a Turkish hospital.
+
+Start by setting things up
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library("here")
+```
+
+Now read in the data file called `covid_vaccines.csv`. Make sure that this data file is located in the data folder of your Biostats-HW project! Assign the data to an object.
+
+```{r}
+vaccines <- read.csv(here("Data","covid_vaccines.csv"))
+```
+
+There are two variables in the data set that should be assigned as factor variables. Do that now.
+
+```{r}
+vaccines$Vaccination_status <- as.factor(vaccines$Vaccination_status)
+
+vaccines$Survival <- as.factor(vaccines$Survival)
+```
+
+## Examine and plot the data
+
+Now view the data set. What do you notice about it? Are there any obvious count data already created? Explain:
+
+Just looking at the dataframe R created when I read in the csv file, I do not notice anything particularly abnormal. It just looks like any other dataframe to me. Counts can be calculated from this data set. The observations seem to be divided into four categories in the order in which they were entered.
+
+Now you need to write some code to obtain the actual counts and save them in a new object called `covid_counts`. You will use the familiar `group_by` and `summarise`. However, you need to try a new trick to get counts when your dataset has no actual numbers in it. I'm going to suggest that within your `summarise` statement you create a new variable called `count`. And I'm going to ask you to see if you can figure out how to use a function called `length` to obtain count data. You may need to use the help in RStudio or google to figure out how to do this step.
+
+```{r}
+covid_counts <- vaccines %>% 
+  group_by(Vaccination_status, Survival) %>%
+  summarise(Count=n())
+#I asked someone for help. This seems to make the new dataframe with all of the correct information but the length() function wasn't employed within this part of the code. Just Count=n() was. 
+
+length(vaccines) #is this it? 
+#should I make a new data frame then use the length function 
+vax_live <- filter(vaccines, Vaccination_status == "Fully vaccinated", Survival == "Lived")
+length(vax_live) #still only getting an output of three 
+length(vaccines$Survival) #now i am getting 508 
+#maybe i can...
+length(vax_live$Survival)#now i have 241 
+```
+
+I am not sure how to incorporate these values into anything though
+
+Now make a bar plot that shows the count data using the `covid_counts` dataframe you just created. Put survival on the x-axis and fill the bars based on vaccination status. Color vaccinated patients in dark green and unvaccinated patients in black. Remove the gray background.
+
+```{r}
+ggplot(covid_counts, aes(x = Survival, y= Count, fill = Vaccination_status)) +
+  geom_bar(stat="identity", position = "dodge") +
+  scale_fill_manual(values = c("Fully vaccinated" = "darkgreen", "Not vaccinated" = "black")) + 
+  theme_bw()
+  
+```
+
+## Conduct the Chi-square test
+
+Now use the information from Chapter 5 and Homework 21 to conduct a Chi-square test of association. Your "null hypothesis" is that there is no association between whether a patient has had a covid vaccine and their survival in the emergency room.
+
+```{r}
+vaccines.mat <- xtabs(Count ~ Vaccination_status + Survival, data=covid_counts)
+```
+
+```{r}
+chisq.test(vaccines.mat)
+```
+
+## Interpret the results
+
+Now write a statement or two that interprets the results of your analysis.
+
+Our statistical output does not support the null-hypothesis that the Covid vaccine is associate with emergency room death outcomes. To the contrary, our p-value suggests that there is a significant association between vaccination status and survival.
