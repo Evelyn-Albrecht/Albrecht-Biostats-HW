@@ -1,0 +1,140 @@
+---
+title: "Homework 23"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+# 5.4 Introducing... linear models
+
+general linear models include many types of models including regression, multiple regression, ANOVA, and ANCOVA.
+
+assumption of the normally distributed.
+
+We are continuing with out pre-established workflow (plot model check assumptions interpret plot again)
+
+# 5.5 Simple linear regression
+
+example of whether plant growth rates vary with soil moisture content. We predict that higher moisture will allow for higher growth rates.
+
+We have response and explanatory variables. Both are continuous.
+
+## 5.5.1 Getting and plotting the data
+
+set up
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library("here")
+```
+
+Read in the data
+
+```{r}
+plant_growth <- read.csv(here("Data","plant.growth.rate.csv"))
+glimpse(plant_growth)
+```
+
+We can see the data expected.
+
+Make a scatterplot
+
+```{r}
+ggplot(plant_growth, aes(x=soil.moisture.content, y=plant.growth.rate))+ 
+  geom_point(size = 3, color= "orange")
+```
+
+## 5.5.2 Interpreting the figure: biological insight 
+
+A couple of things that we should notice about this graph
+
+-   positive slope
+
+-   pre-empt the statistical analysis
+
+    -   guesstimate the slope and intercept
+
+we should generally try to examine the data before we do the analysis itself. We can even try to figure out degrees freedom.
+
+## 5.5.3 Making a simple linear regression happen 
+
+the function lm() is used to fit a linear model. It is similar to xtabs and t.test in that it needs formulas and data.
+
+```{r}
+model_pgr <- lm(plant.growth.rate ~ soil.moisture.content, data = plant_growth)
+```
+
+gonna quote book verbatim here " this reads, 'Fit linear model, where we hypothesize that plant growth is a function of soil moisture content, using the variables from the plant_growth dataframe'
+
+## 5.5.4 Assumptions first 
+
+Now we want to see whether our predictions based on the on the initial plot was correct.
+
+We should first check out assumptions of our model.
+
+new terms!! ggfortify and its autoplot() function.
+
+autoplot uses what we made in the lm() and creates four
+
+I am not sure if ggfortify is part of tidyverse or not
+
+```{r}
+install.packages("ggfortify")
+library(ggfortify)
+autoplot(model_pgr, smooth.colour = NA)
+```
+
+"What, pray tell, do these plots mean?"
+
+residuals - errors around a fitted line
+
+the four plots
+
+-    top left -systemic part - indicates whether things have gone wrong (hump-shape valleys will be present)
+
+-    top right - evaluates the assumption of normality dots are residuals. better than making a histogram
+
+-    bottom left - assumption of equal variance - y axis as indicator for variance
+
+-   bottom right - evaluates leverage  - important points in swaying the gradient and outliers
+
+read stats textbooks apparently
+
+no patterns means all good?
+
+smooth.colour=NA - suppresses wiggly line
+
+## 5.5.5 Now the interpretation 
+
+can we reject the null hypothesis? Time to run the analysis - anova() and summary()
+
+anova() doesn't perform an anova, it produces a table of statistics - sum-of-squares table.
+
+summary() produces of the estimates of the coefficients of the line that is 'the model'
+
+```{r}
+anova(model_pgr)
+```
+
+Large F-values indicates a small error variance. With a single df, means a small p-value.
+
+```{r}
+summary(model_pgr)
+```
+
+## 5.5.6 From stats back to the figure 
+
+final step in the workflow is to translate the model back to a figure.
+
+```{r}
+ggplot(plant_growth, aes(x=soil.moisture.content, y=plant.growth.rate)) +
+  geom_point() +
+  geom_smooth(method = 'lm') + 
+  ylab("Plant Growth Rate (mm/week)") + 
+  theme_bw()
+```
+
+geom_smooth(method = "lm") "is ggplot2-speak for 'shove a linear-model fitted line, and the standard error of the fit, using a flash transparent grey, onto my graph'"
+
+# NEXT TIME: ANOVA
