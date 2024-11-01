@@ -1,0 +1,145 @@
+---
+title: "Homework 25"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+# 5.6 Analysis of variance: the one-way ANOVA
+
+final example for this chapter (5) is the one-way ANOVA.
+
+Explanatory variable is categorical variable
+
+adding more levels than what we had in the compensation data.
+
+## 5.6.1 Getting and plotting the data 
+
+We will be looking at water flea growth rates. Do parasites (3 types) alter growth rates? We are adding a control treatment to the mix.
+
+We are going to use the same workflow.
+
+Lets do the basics
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library("here")
+library(ggfortify)
+daphnia <- read.csv(here("Data", "Daphniagrowth.csv"))
+glimpse(daphnia)
+```
+
+This data frame has 3 variables. we want to use two of them for the analysis.
+
+we will be making a box-and-whisker plot to view variation in responses with a function of a categorical variable.
+
+```{r}
+ggplot(daphnia, aes(x=parasite, y=growth.rate)) + 
+  geom_boxplot() + 
+  theme_bw()
+```
+
+Coordinate flipping. We will flip the axes. This can help use visualize categorical data better.
+
+```{r}
+ggplot(daphnia, aes(x=parasite, y=growth.rate)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  coord_flip()
+```
+
+This allows us to actually be able to read the names of the categories (they were all bunched on top of each other before).
+
+From this it is noticeable that there is differences between the growth rates between the different treatments. The control seemingly produces the higher growth rate.
+
+we expect the growth rate to be
+
+1.  parasites overall bring growth rate down
+2.  the extent to which they affect are P. ramosa \< M. bicuspidata \< P. perplexa.
+
+we can also go on to estimate the average growth rate for each treatment and the degrees of freedom.
+
+Time to construct a linear model the function is ...lm()
+
+## 5.6.2 Construct the ANOVA
+
+We will create model in the same way we did for the regression.
+
+```{r}
+model_grow <- lm(growth.rate ~ parasite, data=daphnia)
+```
+
+## 5.6.3 Check the Assumptions 
+
+Time to evaluate the assumptions of this model
+
+once again we are going to evaluate the assumptions in the same way: using autoplot
+
+```{r}
+autoplot(model_grow, smooth.colour = NA)
+```
+
+these figures suggest that everything is fine.
+
+I really need to read a stats textbook
+
+time to apply the anova() function to a ANOVA
+
+## 5.6.4 Making an inference from a one-way ANOVA
+
+First we are determining whether there is an effect at all of our treatments
+
+```{r}
+anova(model_grow)
+```
+
+The null hypothesis - all the groups come from the population with the same mean. The F-value is how likely that is to be true. small p values allows to reject null hypothesis.
+
+## 5.6.5 Treatment contrasts 
+
+produce the information in a summary table. treatment contrasts do this.
+
+contrasts express coefficients taken from statistical models. look at "?contr.treatments"
+
+```{r}
+summary(model_grow)
+```
+
+treatment group "control" is missing, but not really, it has been labeled '(Intercept)'
+
+R likes to alphabetize.
+
+Treatment contrasts report differences between the reference level (control?) and other levels.
+
+You can also get the means for each treatment using dplyr and then calculate the contrasts.
+
+```{r}
+sumDat <- daphnia %>%
+  group_by(parasite) %>%
+  summarise(meanGR = mean(growth.rate))
+```
+
+subtract mean of parasite from control.
+
+We were lucky because the control was the reference.
+
+Now we are going to produce a figure.
+
+I'm not sure how we are suppose to do so.
+
+# 5.7 Wrapping up
+
+## take home messages 
+
+-   Have a consistent workflow for analyses
+
+-   Always make a graph that answers your question before touching any statistical tests.
+
+-   interpret as much as you can, for example, slopes, intercepts, contrasts, and degrees of freedom, from the graph before doing statistics
+
+-   check if your data violate any assumptions, before interpreting your model results
+
+-   make a beautiful graph to communicate your results, and write a biologically focused sentence describing your results
+
+-   R makes this all very easy
