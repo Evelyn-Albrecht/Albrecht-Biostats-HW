@@ -1,0 +1,116 @@
+---
+title: "Homework 24"
+format: html
+editor: visual
+---
+
+## Overview
+
+For your homework you will implement a data analysis using a dataset on crab growth measurements.
+
+Set things up (hint: there is a new package to add with `library()`)
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library("here")
+library(ggfortify)
+```
+
+## The data
+
+Let's pull in some data appropriate biologists: crab measurements. This dataset includes measurements of farmed crabs.
+
+```{r}
+crabs <- read.csv(here("Data","CrabAgePrediction.csv"))
+glimpse(crabs)
+```
+
+One of the variables is categorical - let's fix that in the data.
+
+```{r}
+crabs$Sex <- as.factor(crabs$Sex)
+```
+
+## Question
+
+Is there a relationship between height and weight in female crabs?
+
+1.  Extract the data for just female crabs.
+
+    ```{r}
+    female_crabs <- filter(crabs, Sex== "F")
+    ```
+
+2.  Examine the response and predictor variables and use the flow chart from class to decide the appropriate statistical analysis (choose from: chi-square, 2-sample t-test or **linear regression**). Explain your answer here:
+
+    We are looking at the relationship between height and weight if female crabs. Both of these variables are ratio data. When examining the relationship between two sets of ratio data, we use a linear regression.
+
+3.  Work through the data analysis **following all of the steps provided in chapter 5 of your book**. You may use class notes or homework keys as a guide.
+
+    First plot the data to make surface level observations
+
+    ```{r}
+    ggplot(female_crabs, aes(x = Height, y = Weight)) + 
+      geom_point() +
+      theme_bw()
+    ```
+
+There seems to be a positive linear relationship between the height and weight of female crabs. There also seems to be a pretty substantial outlier and a much lesser one. I am going to omit both of these data points.
+
+```{r}
+female_crabs_corrected <- filter(female_crabs, Height < 1, Height > 0.1)
+```
+
+Now I am going to replot my graph.
+
+```{r}
+ggplot(female_crabs_corrected, aes(x = Height, y = Weight)) + 
+  geom_point() +
+  theme_bw()
+```
+
+Before I create my model I also want to estimate the slope and intercept of the trend line.
+
+y = mx + b
+
+m = slope = rise/run, y/x (is there a way to insert a delta symbol?)
+
+rise/height/y = 76 - 2 = 74
+
+run/weight/x = 0.65 - 0.12 = 0.53
+
+m= 0.65/0.12 = 5.416667
+
+Now create our model
+
+```{r}
+model_crabs <- lm(Weight ~ Height, data=female_crabs_corrected)
+```
+
+Lets now test the assumptions of the model
+
+```{r}
+autoplot(model_crabs, smooth.colour = NA)
+```
+
+Looks good I think. Moving onto running the statistical test (anova and summary)
+
+```{r}
+anova(model_crabs)
+```
+
+Statistically significant p-value
+
+```{r}
+summary(model_crabs)
+```
+
+Finally make it into a pretty graph
+
+```{r}
+ggplot(female_crabs_corrected, aes(x= Height, y= Weight)) +
+  geom_point(color = "red") + 
+  theme_bw() 
+# I did not rename the x or y axes because I am unsure of the units of measurement 
+```
