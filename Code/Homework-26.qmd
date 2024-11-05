@@ -1,0 +1,97 @@
+---
+title: "Homework-26"
+format: html
+editor: visual
+---
+
+Setting things up...
+
+```{r}
+rm(list=ls())
+library(tidyverse)
+library("here")
+library(ggfortify)
+library(multcomp)
+```
+
+Read in data as a dataframe.
+
+```{r}
+peas <- read.csv(here("Data", "s_r_pea_sections.csv"))
+```
+
+Change treatment levels character to factor data.
+
+```{r}
+peas$Treatment <- as.factor(peas$Treatment)
+levels(peas$Treatment)
+```
+
+Make preliminary graph
+
+```{r}
+ggplot(peas, aes(pea_section_length_ou)) + 
+  geom_histogram(binwidth = 8) + 
+  facet_wrap(peas$Treatment) + 
+  theme_bw()
+```
+
+Looks like there as some differences. The control seems to have the highest mean pea section length, followed by 2% sucrose, 2% glucose, 2% fructose, and lastly 1% fructose & 1% glucose.
+
+There is an issue; the control isn't the first level in alphabetical order. We are going to need it to be for the summary() in which I am looking for difference between the control and other levels. The which( %in% c("")) needs the new communal value to be one that was there initially. I googled around for a solution.
+
+```{r}
+peas <- peas %>%
+  mutate(Treatment = recode(Treatment, Control = "1 control"))
+```
+
+Time to make a model.
+
+```{r}
+pea_model <- lm(pea_section_length_ou ~ Treatment, data=peas)
+```
+
+Check assumptions via autoplot().
+
+```{r}
+autoplot(pea_model, smooth.colour = NA)
+```
+
+This looks okay. Time to go forward with analysis.
+
+Run the initial analysis.
+
+```{r}
+anova(pea_model)
+```
+
+This analysis has shown us there is a large F-value and small p-value. We can assume from this that there is a significant difference between treatments.
+
+Look at the contrast.
+
+```{r}
+summary(pea_model)
+```
+
+This is still not working, even though alphabetically 1 control is ahead of 1 percent fructose 1 percent glucose. I do not know how to fix it.
+
+There seem to be a couple of significant differences between some treatments.
+
+I am just going to move forward
+
+Do a pairwise comparison to compare between treatment levels
+
+```{r}
+phc1 <- glht(pea_model, linfct = mcp(Treatment = "Tukey"))
+summary(phc1)
+```
+
+Small p-values indicate that there is a significant difference between treatments. I am going to reformat it to be easier to look at it.
+
+```{r}
+cld(phc1)
+```
+
+Much better...
+
+The control treatment had significantly different pea sections lengths than the other treatments, being longer. The 2% sucrose treatment was also significantly different from the other treatments. This treatment had significantly longer pea sections than the other sugar treatments whilst still being significantly shorter than the control. The 2% glucose, 2% fructose, and 1% fructose & 1% glucose treatments had no significant difference from each other.
