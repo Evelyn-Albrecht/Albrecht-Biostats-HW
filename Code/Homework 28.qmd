@@ -1,0 +1,247 @@
+---
+title: "Homework 28"
+author: "Evelyn Albrecht"
+format: html
+editor: visual
+---
+
+GSWR CHAPTER 8
+
+# Pimping Your Plots: Scales and Theme in ggplot2
+
+## 8.1 What you already know about graphs
+
+we should be proficient with
+
+-   using and combining geom_point(), geom_line(), geom_boxplot(), geom_bar(), geom_histogram(), and geom_errorbar()
+
+-   using aes() with color = and fill = to assign colors and fills to point or bars based on categorical grouping variables
+
+-   using size = and alpha = withing aes() or geom() to customize the point size and transparceny of the point/bars/histograms
+
+-   using ymin = and ymax =, generated via dplyr, within aes() and geom_errorbar().
+
+-   use scale_colour_manual() and scale_fill_manual() to choose custom point and fill colors
+
+-   using theme_bw() to customize overall features of the graph including background color, etc
+
+wow! we have picked up a lot.
+
+Its time to start learning about the extended features and synthesizing the dpylr.
+
+remember to look a cheat sheets online that you may want to revisit.
+
+## 8.2 Preparation
+
+may want to move to another script - nah
+
+set up
+
+```{r}
+install.packages("gridExtra")
+```
+
+```{r}
+rm(list=ls()) 
+library(tidyverse)
+library(here)
+library(gridExtra)
+```
+
+Read in data.
+
+```{r}
+compensation <- read.csv(here("Data","compensation.csv"))
+```
+
+### 8.2.1 Did you know ...? 
+
+start by making a scatterplot of fruit vs root. and also a box-and-whisker plot. threat the grazing as a two level category
+
+```{r}
+#scatterplot 
+eg_scatter <- ggplot(compensation, aes(x=Root, y=Fruit)) + 
+  geom_point()
+
+#box-and-whiskers
+eg_box <- ggplot(compensation, aes(x=Grazing, y=Fruit)) + 
+  geom_boxplot()
+```
+
+Now use figure and add to it
+
+```{r}
+eg_scatter + theme_bw()
+```
+
+grid.arrange allows you to see multiple figures on the same page.
+
+```{r}
+grid.arrange(eg_scatter, eg_box, nrow = 1)
+```
+
+## 8.3 What you may want to customize
+
+**list of things we often want to change on graphs**
+
+-   axis labels, with math symbols, rotation, and colors
+
+-   axis ranges and tick mark locations
+
+-   the grey background **and** grid lines
+
+-   the boxes and title in the key
+
+-   text annotations inside the plot
+
+two routes of to customizing ggplot() figure. one is scale() and one is theme()
+
+the theme essentially determines how the parts of the graph that are not directly determined by the mappings in aes() are displayed (ex. gridlines and text formatting)
+
+scale functions are tied to the x and y axis variables - aesthetic mapping
+
+pieces of graph are connected to a variable.
+
+## 8.4 Axis labels, axis limits, and annotation
+
+we can change with axis labels with xlab() and ylab(). function only tells R what to show you.
+
+```{r}
+eg_scatter +xlab("Root Biomass") + ylab("Fruit Production")
+```
+
+you can also add a title to the graph. (but we don't cause that's what figure captions are for.)
+
+```{r}
+eg_scatter + ggtitle("My SUPERB title")
+```
+
+we can combine all three of these functions.
+
+```{r}
+eg_scatter + labs(title = "my useless title", x= "Root Biomass", y="Fruit Production")
+```
+
+We can also change the range of values on the axis.
+
+```{r}
+eg_scatter + xlim(0, 20) + ylim(0, 140)
+```
+
+### 8.4.1 Putting costum text inside the figure 
+
+the annotate() function allows for the placement of custom text. We mark where the text should go via x and y values.
+
+```{r}
+eg_scatter + 
+  annotate("text", x=c(6,8), y=c(105,25), label=c("text up here...", "...and text down here"))
+```
+
+## 8.5 Scales
+
+scale() sets some defaults. grabs variables on axis and specifies features.
+
+we can adjust x-axis with the limits() function.
+
+change the frequency and locations of ticks with breaks =.
+
+```{r}
+eg_scatter + scale_x_continuous(limits = c(4,11), breaks = 4:11)
+```
+
+we can also change color and fills of objects usinfg colour=. custom color w/ scale_colour_manual().
+
+```{r}
+ggplot(compensation, aes(x=Root, y=Fruit, colour = Grazing)) + 
+  geom_point() +
+  scale_color_manual(values = c(Grazed = "brown", Ungrazed = "green"))
+```
+
+leverage function of scales\_(). scale_y_continuous(). trans=.
+
+```{r}
+eg_box + 
+scale_y_continuous(breaks = seq(from = 10, to = 150, by = 20), trans = "log10")
+```
+
+seq () generates breakpoints of where we want ticks.
+
+## 8.6 The theme 
+
+theme() adjusts non-aesthetic aspects of the graph. there are some pre-made custom themes such ae theme_bw()
+
+### 8.6.1 Some theme() syntax about the panels and gridlines 
+
+get rid of light grey background and create light blue gridlines. introduce panel.
+
+```{r}
+eg_scatter + 
+  theme(panel.background = element_rect(fill = NA, color = "black"), 
+        panel.grid.minor = element_blank(), 
+        panel.grid.major = element_line(color = "lightblue"))
+```
+
+**review features**
+
+-   
+
+-   
+
+-   
+
+-   
+
+### 8.6.2 Some theme() syntax about axis titles and tick marks 
+
+prior themes are base themes. we can change aspects of axis titles with axis.title(). change color and size and angle of ticks.
+
+```{r}
+eg_box + theme(
+  axis.title.x = element_text(color = "cornflowerblue", size = rel(2)), 
+  axis.text.x = element_text(angle = 45, size = 13, vjust = 0.5)
+)
+```
+
+increasing size over default.
+
+### 8.6.3 Discrete-axis customization
+
+specific alterations to discrete axes. scale_x_discrete() and scale_y_discrete() to customize labeling of groups.
+
+change names of levels on graphs
+
+```{r}
+eg_box + scale_x_discrete(limits=c("Ungrazed", "Grazed"), labels= c("Control", "Grazed"))
+```
+
+### 8.6.4 Some theme() syntax about customizing legends/keys
+
+key/legend provides a quick look that can save hours!
+
+clean key
+
+```{r}
+ggplot(compensation, aes(x = Root, y= Fruit, color = Grazing)) + 
+  geom_point() + 
+  theme(legend.key = element_rect(fill = NA))
+```
+
+Sometimes we don't want a key at all. use element_blank() to get rid of it. to do this we use legend.position() attribute.
+
+```{r}
+ggplot(compensation, aes(x = Root, y= Fruit, color = Grazing)) + 
+  geom_point() + 
+  theme(legend.position = "none")
+```
+
+then we can get rid of the grey background again.
+
+```{r}
+ggplot(compensation, aes(x = Root, y= Fruit, color = Grazing)) + 
+  geom_point() + 
+  theme(legend.position = "none", panel.background = element_rect(fill = NA)) 
+```
+
+## 8.7 Summing up
+
+we now have the skills to make cool graphs. YAY!
